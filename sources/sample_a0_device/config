@@ -1,0 +1,42 @@
+# ============================================================================
+#  sample_a0_device — Source ROM config for the public sample
+# ============================================================================
+#  This file describes the ROM you're porting FROM. It tells the pipeline
+#  which partitions to pull out of the stock super.img and how they're
+#  structured.
+#
+#  Same rules as the device config: KEY=value per line, '#' starts comments.
+#  The directory name (sources/sample_a0_device/) locks in the source name.
+# ============================================================================
+
+# Display name shown in the Build menu's Source dropdown.
+SOURCE_NAME=Sample Android 0
+
+# Slot model of the SOURCE ROM, if true then it'll read *_a.img file (not the target device — that's in
+# base_devices/.../config).
+SOURCE_AB_SLOT=false
+
+# Source uses System-As-Root layout, copy from /system instead of / for the system folder.
+SOURCE_SYSTEM_AS_ROOT=true
+
+# The single super image that contains every dynamic partition. Put the
+# file at sources/sample_a0_device/images/<SOURCE_IMAGE_FILE>.
+SOURCE_IMAGE_FILE=super.img
+
+# ── Which partitions the pipeline reads from the source ─────────────────────
+# SOURCE_COPY_IMAGE   — these get CUT from source and layered on target.
+# SOURCE_EMBED_*      — these get merged INTO system (for OEM region/language
+#                       partitions that some ROMs ship as separate images).
+# SOURCE_MAKE_FILE    — the master list of every partition present inside
+#                       the source super.img. Add everything your source
+#                       actually has, even when you don't use it.
+SOURCE_COPY_IMAGE=product,system,system_ext
+SOURCE_EMBED_SYSTEM_IMAGE=sample_region
+SOURCE_MAKE_FILE=product,system,system_ext,vendor,sample_region
+
+# ── Optional extra partition size knobs ─────────────────────────────────────
+# Bump the computed partition size. Useful when scripts add a lot of new
+# files to a tight partition and the auto-calculated size overflows.
+#
+#   SOURCE_PARTITION_SYSTEM_EXTRA_SIZE=67108864   # +64 MB
+#   SOURCE_PARTITION_PRODUCT_EXTRA_SIZE=33554432  # +32 MB

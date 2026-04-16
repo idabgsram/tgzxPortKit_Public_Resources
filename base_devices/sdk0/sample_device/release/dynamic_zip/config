@@ -1,0 +1,12 @@
+# filename-inside-images → partition name on device
+#
+# Every entry here is copied into the OTA zip AS-IS and a matching
+# `package_extract_file("<filename>", "/dev/block/by-name/<partition>");`
+# line is appended to updater-script at build time. Use this for boot,
+# dtbo, firmware images, logo.img, etc. — anything that isn't part of
+# super.img.
+#
+# Place the actual files in release/dynamic_zip/images/.
+
+boot.img=boot
+dtbo.img=dtbo

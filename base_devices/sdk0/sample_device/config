@@ -1,0 +1,77 @@
+# ============================================================================
+#  sample_device — Device target config for the public sample
+# ============================================================================
+#
+#  This file is read once at the start of every build. Every KEY=value here
+#  becomes available to the rhai scripts via the DEVICE_* constants and drives
+#  what the pipeline does (which partitions to build, slot mode, output size,
+#  etc.). Comments start with '#' and blank lines are ignored.
+#
+#  The path of this file locks in three things:
+#    base_devices/
+#      sdk<N>/           ← Android SDK the target was baked against (SDK0 = fake)
+#        <codename>/     ← directory name == DEVICE_CODENAME used throughout
+#          config        ← THIS FILE
+#
+#  Change ANYTHING except the directory name with zero consequences — the
+#  codename is how tgzxPortKit V3 finds this device when you pick it in the UI.
+# ============================================================================
+
+# ── Human-visible identity ──────────────────────────────────────────────────
+# Shown in the Build menu + stamped into the ported ROM's build.prop.
+DEVICE_NAME=Sample Device
+DEVICE_CODE=SAMPLE_X0
+DEVICE_ASSERT_MODEL=SAMPLE_X0
+DEVICE_CHIPSET=sample_chipset
+
+# ── Vendor SDK version ──────────────────────────────────────────────────────
+# Vendor partition usually tracks ONE behind platform SDK (e.g. Android 16
+# platform on a vendor still built against Android 15). Set to 0 for the
+# fictional public sample so nothing real gets shadowed.
+# for example : Android 16 = DEVICE_VENDOR_SDK=36
+DEVICE_VENDOR_SDK=0
+
+# ── Physical attributes used by patches ─────────────────────────────────────
+DEVICE_LCD_DENSITY=420
+
+# ── Slot model ──────────────────────────────────────────────────────────────
+# "true"  → A/B device (partitions get _a / _b suffix)
+# "false" → legacy single-slot device
+DEVICE_AB_SLOT=true
+
+# ── Super image ─────────────────────────────────────────────────────────────
+# Most modern devices pack all dynamic partitions into super.img. Older
+# legacy targets may not — flip this off and the pipeline skips lpmake.
+DEVICE_SUPER_IMAGE=true
+DEVICE_IMAGE_FILE=super.img
+# Maximum super partition size in bytes (check the stock ROM for your
+# device). The value below is 9 GiB, a common value for mid-range phones.
+DEVICE_SUPER_SIZE=9663676416
+
+# ── Partitions the pipeline can read the images ─────────────────────────────
+# Comma-separated, no spaces. Add/remove based on the device layout.
+DEVICE_MAKE_FILE=product,system,system_ext,vendor,vendor_dlkm,odm_dlkm
+
+# ── Partitions taken as-is from the target device images ────────────────────
+# Anything listed here is copied from base_devices/.../images/ untouched.
+# Handy for vendor/vendor_dlkm/odm_dlkm that you don't want to re-stage.
+DEVICE_USE_IMAGE=vendor,vendor_dlkm,odm_dlkm
+
+# ── System-as-Root layout (Android 9+) ──────────────────────────────────────
+DEVICE_SYSTEM_AS_ROOT=true
+
+# ── Output filesystems ──────────────────────────────────────────────────────
+# Debug builds keep ext4 so you can mount/inspect easily. Release builds use
+# EROFS for smaller size + matches what the stock ROM ships.
+DEVICE_IMAGE_OUTPUT_FILESYSTEM=ext4
+DEVICE_IMAGE_RELEASE_OUTPUT_FILESYSTEM=erofs
+
+# ── Release packaging mode ──────────────────────────────────────────────────
+#   dynamic_zip → flashable recovery-style OTA zip (edify + update-binary)
+#   super_zip   → raw super.img packed into a plain zip
+DEVICE_BUILD_OUTPUT=dynamic_zip
+
+# ── Feature flags read by the rhai scripts ──────────────────────────────────
+# Scripts check DEVICE_CONFIG.contains("foo") to toggle behaviour per-device.
+# Use a comma list; empty is fine.
+DEVICE_FEATURE_CONFIG=sample_feature,demo_mode

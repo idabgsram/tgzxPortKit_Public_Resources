@@ -1,0 +1,21 @@
+# Exclude list for the sample_region partition.
+#
+# One path per line, relative to the partition root (so `etc/carrier.xml`
+# skips /sample_region/etc/carrier.xml). Lines starting with '#' are
+# comments; blank lines are ignored. Anything listed here is simply not
+# copied into the build image.
+#
+# Naming convention:
+#   <partition>.list         → applied for debug builds
+#   <partition>_release.list → applied for release builds
+#   <partition>_<custom>.list → applied for debug_<custom> / release_<custom>
+#
+# So the file for RELEASE builds on this same partition would be
+# `sample_region_release.list`.
+
+# Example: drop OEM carrier branding the sample ROM ships with
+etc/carrier/carrier-branding.xml
+etc/carrier/operator-logo.png
+
+# Example: wallpapers are huge and you want a leaner build
+media/wallpapers/oem/

@@ -1,0 +1,8 @@
+# Source+device pair overlay images.
+#
+# Runs alongside base_devices/.../release/dynamic_zip/config and layers
+# on top. Use this for images that depend on the SPECIFIC source ROM
+# (e.g. a boot.img that the source built from its own kernel).
+
+# Example:
+# boot_sample.img=boot

@@ -1,0 +1,29 @@
+# ─── Partition images (huge, never commit) ─────────────────────────────────
+# Keep the directory structure but not the multi-gigabyte binary payload.
+**/images/*.img
+**/images/*.IMG
+**/images/*.sparse
+**/images/super.img
+**/images/**/*.img
+**/images/**/*.sparse
+
+# ─── Pipeline scratch + output ─────────────────────────────────────────────
+# tgzxPortKit V3 writes build artefacts under <project>/work/ at runtime. None
+# of that belongs in the sample repo.
+work/*
+
+# ─── Auto-generated SELinux fix store ──────────────────────────────────────
+# Written by the "Auto Fix SELinux" toggle in the Build menu. Keep it local
+# per-user so fixes for one user's source tree don't pollute everyone else.
+sources/**/selinux.*.rhai
+
+# ─── Editor / OS junk ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
